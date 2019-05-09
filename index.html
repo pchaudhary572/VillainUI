@@ -27,24 +27,55 @@
           <tr>
             <th scope="col">Name</th>
             <th scope="col">Description</th>
+            <th scope="col">Image</th>
           </tr>
         </thead>
         <tbody id="tblbody"></tbody>
       </table>
 
-      <hr>
+      <hr />
       <h2>Add Hero</h2>
-      <input type="text" name="name" id="name" placeholder="Name">
-      <input type="text" name="desc" id="desc" placeholder="Description">
-      <button id="add-hero">Add Hero!</button>
 
-      <button id="remove-heroes">Remove All Heroes!!</button>
+      <form class="form col-sm-6" id="hero-form">
+        <input
+          type="text"
+          class="form-control"
+          name="name"
+          id="name"
+          placeholder="Full Name"
+        />
+        <br />
+        <input
+          type="text"
+          class="form-control"
+          name="desc"
+          id="desc"
+          placeholder="Description"
+        />
+        <br />
+        <form class="col-6" enctype="multipart/form-data">
+          <!-- <label for="fileToUpload">Select an Image to Upload</label> <br /> -->
+          <input type="file" name="fileToUpload" id="fileToUpload" />
+        </form>
+        <br />
+
+        <button type="submit" class="btn btn-primary" id="add-hero">
+          Add Hero!
+        </button>
+      </form>
+      <hr />
+      <br />
+      <button id="remove-heroes" class="btn btn-danger">
+        Remove All Heroes!!
+      </button>
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script
-      src="https://code.jquery.com/jquery-3.3.1.min.js"
-    </script>
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
       integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
