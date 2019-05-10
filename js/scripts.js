@@ -1,4 +1,14 @@
 $(function () {
+
+    let base_url = 'http://localhost:3000/';
+
+    function rowTemplate(hero) {
+        let source = base_url + "uploads/" + hero.image;
+        let oneRow = "<tr><td>" + hero.name + "</td><td>" + hero.desc + "</td>";
+        oneRow += "<td><img src= " + source + " width='60' /></td></tr>";
+        return oneRow;
+    }
+
     let tblBody = $("#tblbody");
     let imageFile = '';
     $.ajax({
@@ -6,12 +16,8 @@ $(function () {
         url: 'http://localhost:3000/heroes',
         success: function (heroes) {
             let myRows = [];
-
             $.each(heroes, function (index, hero) {
-                source = 'http://localhost:3000/uploads/' + hero.image;
-                thisRow = "<tr><td>" + hero.name + "</td><td>" + hero.desc + "</td>";
-                thisRow += "<td><img src= " + source + " width='60' /></td></tr>";
-                myRows.push(thisRow);
+                myRows.push(rowTemplate(hero));
             });
             tblBody.append(myRows);
         },
@@ -26,7 +32,6 @@ $(function () {
         if (files.length > 0) {
             formData.append("imageFile", files[0]);
         }
-
         $.ajax({
             type: 'POST',
             url: 'http://localhost:3000/upload',
@@ -54,11 +59,7 @@ $(function () {
             url: 'http://localhost:3000/heroes',
             data: hero,
             success: function (hero) {
-                source = 'http://localhost:3000/uploads/' + hero.image;
-                thisRow = "<tr><td>" + hero.name + "</td><td>" + hero.desc + "</td>";
-                thisRow += "<td><img src= " + source + " width='60' /></td></tr>";
-
-                tblBody.append(thisRow);
+                tblBody.append(rowTemplate(hero));
                 $('#hero-form').trigger('reset');
             },
             error: function (error) {
