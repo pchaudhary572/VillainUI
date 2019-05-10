@@ -1,16 +1,17 @@
 $(function () {
 
+    let tblBody = $("#tblbody");
     let base_url = 'http://localhost:3000/';
+    let imageFile = '';
 
     function rowTemplate(hero) {
         let source = base_url + "uploads/" + hero.image;
         let oneRow = "<tr><td>" + hero.name + "</td><td>" + hero.desc + "</td>";
-        oneRow += "<td><img src= " + source + " width='60' /></td></tr>";
+        oneRow += "<td><img src= " + source + " width='60' /></td>";
+        oneRow += '<td><button type="button" class="btn btn-danger delete" hero_id=' + hero._id + '>Del</button></td> </tr>';
         return oneRow;
     }
 
-    let tblBody = $("#tblbody");
-    let imageFile = '';
     $.ajax({
         type: 'GET',
         url: 'http://localhost:3000/heroes',
@@ -80,5 +81,15 @@ $(function () {
                 alert("Couldn't delete all heroes");
             }
         });
+    });
+
+    tblBody.delegate('.delete', 'click', function () {
+        $.ajax({
+            type: 'DELETE',
+            url: base_url + 'heroes/' + $(this).attr('hero_id'),
+            success: function () {
+                location.reload();
+            }
+        })
     });
 });
