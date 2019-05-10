@@ -1,5 +1,6 @@
 $(function () {
     let tblBody = $("#tblbody");
+    let imageFile = '';
     $.ajax({
         type: 'GET',
         url: 'http://localhost:3000/heroes',
@@ -19,8 +20,7 @@ $(function () {
         }
     });
 
-
-    $("#add-hero").on('click', function () {
+    $("#fileToUpload").on('change', function () {
         let formData = new FormData();
         let files = $("#fileToUpload").get(0).files;
         if (files.length > 0) {
@@ -35,34 +35,36 @@ $(function () {
             processData: false,
             data: formData,
             success: function (data) {
-                let hero = {
-                    name: $("#name").val(),
-                    desc: $("#desc").val(),
-                    image: data.filename
-                };
-                $.ajax({
-                    type: 'POST',
-                    url: 'http://localhost:3000/heroes',
-                    data: hero,
-                    success: function (hero) {
-                        source = 'http://localhost:3000/uploads/' + hero.image;
-                        thisRow = "<tr><td>" + hero.name + "</td><td>" + hero.desc + "</td>";
-                        thisRow += "<td><img src= " + source + " width='60' /></td></tr>";
-
-                        tblBody.append(thisRow);
-                        $('#hero-form').trigger('reset');
-                    },
-                    error: function (error) {
-                        alert(error);
-                    }
-                });
+                imageFile = data.filename;
             },
             error: function (error) {
                 console.log(error);
             }
-        })
+        });
+    });
 
+    $("#add-hero").on('click', function () {
+        let hero = {
+            name: $("#name").val(),
+            desc: $("#desc").val(),
+            image: imageFile
+        };
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:3000/heroes',
+            data: hero,
+            success: function (hero) {
+                source = 'http://localhost:3000/uploads/' + hero.image;
+                thisRow = "<tr><td>" + hero.name + "</td><td>" + hero.desc + "</td>";
+                thisRow += "<td><img src= " + source + " width='60' /></td></tr>";
 
+                tblBody.append(thisRow);
+                $('#hero-form').trigger('reset');
+            },
+            error: function (error) {
+                alert(error);
+            }
+        });
     });
 
     $("#remove-heroes").on('click', function () {
