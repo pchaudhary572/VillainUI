@@ -16,7 +16,7 @@
       crossorigin="anonymous"
     />
 
-    <title>Hello, world!</title>
+    <title>Tour of Heroes</title>
   </head>
   <body>
     <div class="container">
@@ -28,7 +28,7 @@
             <th scope="col">Name</th>
             <th scope="col">Description</th>
             <th scope="col">Image</th>
-            <th scope="col">Operation</th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody id="tblbody"></tbody>
@@ -54,8 +54,7 @@
           placeholder="Description"
         />
         <br />
-        <form class="col-6" enctype="multipart/form-data">
-          <!-- <label for="fileToUpload">Select an Image to Upload</label> <br /> -->
+        <form enctype="multipart/form-data" id="fileUploadForm">
           <input type="file" name="fileToUpload" id="fileToUpload" />
         </form>
         <br />

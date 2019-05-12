@@ -5,16 +5,19 @@ $(function () {
     let imageFile = '';
 
     function rowTemplate(hero) {
-        let source = base_url + "uploads/" + hero.image;
         let oneRow = "<tr><td>" + hero.name + "</td><td>" + hero.desc + "</td>";
-        oneRow += "<td><img src= " + source + " width='60' /></td>";
+        if (hero.image !== '') {
+            oneRow += "<td><img src= " + base_url + "uploads/" + hero.image + " width='60' /></td>";
+        } else {
+            oneRow += "<td> No Image </td>";
+        }
         oneRow += '<td><button type="button" class="btn btn-danger delete" hero_id=' + hero._id + '>Del</button></td> </tr>';
         return oneRow;
     }
 
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:3000/heroes',
+        url: base_url + 'heroes',
         success: function (heroes) {
             let myRows = [];
             $.each(heroes, function (index, hero) {
@@ -33,18 +36,20 @@ $(function () {
         if (files.length > 0) {
             formData.append("imageFile", files[0]);
         }
+        // $("#add-hero").prop("disabled", true);
         $.ajax({
             type: 'POST',
-            url: 'http://localhost:3000/upload',
+            url: base_url + 'upload',
             contentType: false,
             cache: false,
             processData: false,
             data: formData,
             success: function (data) {
                 imageFile = data.filename;
+                // $("#add-hero").prop("disabled", false);
             },
-            error: function (error) {
-                console.log(error);
+            error: function () {
+                alert("Image upload failed!");
             }
         });
     });
@@ -57,33 +62,35 @@ $(function () {
         };
         $.ajax({
             type: 'POST',
-            url: 'http://localhost:3000/heroes',
+            url: base_url + 'heroes',
             data: hero,
             success: function (hero) {
                 tblBody.append(rowTemplate(hero));
+                imageFile = '';
                 $('#hero-form').trigger('reset');
             },
-            error: function (error) {
-                alert(error);
+            error: function () {
+                alert("Fill all the form fields!");
             }
         });
     });
 
     $("#remove-heroes").on('click', function () {
-        $.ajax({
-            type: 'DELETE',
-            url: 'http://localhost:3000/heroes',
-            success: function () {
-                alert("Deleting all heroes!");
-                location.reload();
-            },
-            error: function () {
-                alert("Couldn't delete all heroes");
-            }
-        });
+        if (confirm("Do you want to delete all heroes?")) {
+            $.ajax({
+                type: 'DELETE',
+                url: base_url + 'heroes',
+                success: function () {
+                    location.reload();
+                },
+                error: function () {
+                    alert("Couldn't delete all heroes");
+                }
+            });
+        }
     });
 
-    tblBody.delegate('.delete', 'click', function () {
+    tblBody.on('click', '.delete', function () {
         $.ajax({
             type: 'DELETE',
             url: base_url + 'heroes/' + $(this).attr('hero_id'),
