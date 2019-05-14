@@ -4,24 +4,24 @@ $(function () {
     let base_url = 'http://localhost:3000/';
     let imageFile = '';
 
-    function rowTemplate(hero) {
-        let oneRow = "<tr><td>" + hero.name + "</td><td>" + hero.desc + "</td>";
-        if (hero.image !== '') {
-            oneRow += "<td><img src= " + base_url + "uploads/" + hero.image + " width='60' /></td>";
+    function rowTemplate(villain) {
+        let oneRow = "<tr><td>" + villain.name + "</td><td>" + villain.desc + "</td>";
+        if (villain.image !== '') {
+            oneRow += "<td><img src= " + base_url + "uploads/" + villain.image + " width='60' /></td>";
         } else {
             oneRow += "<td> No Image </td>";
         }
-        oneRow += '<td><button type="button" class="btn btn-danger delete" hero_id=' + hero._id + '>Del</button></td> </tr>';
+        oneRow += '<td><button type="button" class="btn btn-danger delete" villain_id=' + villain._id + '>Del</button></td> </tr>';
         return oneRow;
     }
 
     $.ajax({
         type: 'GET',
-        url: base_url + 'heroes',
-        success: function (heroes) {
+        url: base_url + 'villains',
+        success: function (villains) {
             let myRows = [];
-            $.each(heroes, function (index, hero) {
-                myRows.push(rowTemplate(hero));
+            $.each(villains, function (index, villain) {
+                myRows.push(rowTemplate(villain));
             });
             tblBody.append(myRows);
         },
@@ -36,7 +36,7 @@ $(function () {
         if (files.length > 0) {
             formData.append("imageFile", files[0]);
         }
-        // $("#add-hero").prop("disabled", true);
+        // $("#add-villain").prop("disabled", true);
         $.ajax({
             type: 'POST',
             url: base_url + 'upload',
@@ -46,7 +46,7 @@ $(function () {
             data: formData,
             success: function (data) {
                 imageFile = data.filename;
-                // $("#add-hero").prop("disabled", false);
+                // $("#add-villain").prop("disabled", false);
             },
             error: function () {
                 alert("Image upload failed!");
@@ -54,20 +54,20 @@ $(function () {
         });
     });
 
-    $("#add-hero").on('click', function () {
-        let hero = {
+    $("#add-villain").on('click', function () {
+        let villain = {
             name: $("#name").val(),
             desc: $("#desc").val(),
             image: imageFile
         };
         $.ajax({
             type: 'POST',
-            url: base_url + 'heroes',
-            data: hero,
-            success: function (hero) {
-                tblBody.append(rowTemplate(hero));
+            url: base_url + 'villains',
+            data: villain,
+            success: function (villain) {
+                tblBody.append(rowTemplate(villain));
                 imageFile = '';
-                $('#hero-form').trigger('reset');
+                $('#villain-form').trigger('reset');
             },
             error: function () {
                 alert("Fill all the form fields!");
@@ -75,16 +75,16 @@ $(function () {
         });
     });
 
-    $("#remove-heroes").on('click', function () {
-        if (confirm("Do you want to delete all heroes?")) {
+    $("#remove-villains").on('click', function () {
+        if (confirm("Do you want to delete all villains?")) {
             $.ajax({
                 type: 'DELETE',
-                url: base_url + 'heroes',
+                url: base_url + 'villains',
                 success: function () {
                     location.reload();
                 },
                 error: function () {
-                    alert("Couldn't delete all heroes");
+                    alert("Couldn't delete all villains");
                 }
             });
         }
@@ -93,7 +93,7 @@ $(function () {
     tblBody.on('click', '.delete', function () {
         $.ajax({
             type: 'DELETE',
-            url: base_url + 'heroes/' + $(this).attr('hero_id'),
+            url: base_url + 'villains/' + $(this).attr('villain_id'),
             success: function () {
                 location.reload();
             }
